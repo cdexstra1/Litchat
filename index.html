@@ -1,20 +1,17 @@
-<html>
-  <head>
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-  </head>
-  <body>
-    <py-script>
-import base64
-import ssl
-import sys
-import socket
-import time
-import threading
-import re
-from micropip import install
-await micropip.install("ssl")
-IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+import asyncio
+
+async def main():
+    # Your code goes here
+    import base64
+    import ssl
+    import sys
+    import socket
+    import time
+    import threading
+    import re
+    from micropip import install
+    await micropip.install("ssl")
+    IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
       # Rest of your code
 
@@ -101,6 +98,9 @@ send_thread.join()
 # Close the IRC socket
 IRC_socket.close()
 
+if __name__ == "__main__":
+    asyncio.run(main())                  
+                 
     </py-script>
   </body>
 </html>
