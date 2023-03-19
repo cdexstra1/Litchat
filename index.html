@@ -5,35 +5,14 @@
   </head>
   <body>
     <py-script>
-      import asyncio
-      from micropip import install
-
-      async def install_dependencies():
-          # Install required packages
-          await install('pycryptodomex')
-          await install('pyopenssl')
-          await install('certifi')
-
-      asyncio.run(install_dependencies())
-
       import base64
+      import ssl
       import sys
       import socket
       import time
       import threading
       import re
-
-      try:
-          import ssl
-      except ImportError:
-          # For Pyodide, load the ssl module using pyodide.loadPackage()
-          import pyodide
-
-          async def load_ssl():
-              await pyodide.loadPackage('ssl')
-
-          asyncio.run(load_ssl())
-          import ssl
+      from micropip import install
 
       IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
