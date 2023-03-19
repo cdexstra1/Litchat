@@ -13,7 +13,7 @@ import time
 import threading
 import re
 from micropip import install
-await install("ssl")
+await micropip.install("ssl")
 IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
       # Rest of your code
