@@ -6,13 +6,27 @@
   <body>
     <py-script>
         import base64
-import ssl
 import sys
 import socket
 import time
 import threading
+import re
+
+try:
+    import ssl
+except ImportError:
+    # For Pyodide, load the ssl module using pyodide.loadPackage()
+    import pyodide
+    async def load_ssl():
+        await pyodide.loadPackage('ssl')
+    asyncio.run(load_ssl())
+
+    import ssl
 
 IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Rest of your code
+
 
 def encode(input_str, password):
     joined = "".join([str(ord(char)).zfill(3) for char in input_str])
