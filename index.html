@@ -5,16 +5,15 @@
   </head>
   <body>
     <py-script>
-      import base64
-      import ssl
-      import sys
-      import socket
-      import time
-      import threading
-      import re
-      from micropip import install
-
-      IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+import base64
+import ssl
+import sys
+import socket
+import time
+import threading
+import re
+from micropip import install
+IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
       # Rest of your code
 
@@ -98,6 +97,8 @@ send_thread.start()
 recv_thread.join()
 send_thread.join()
 
+# Close the IRC socket
+IRC_socket.close()
 
     </py-script>
   </body>
