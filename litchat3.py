@@ -8,6 +8,23 @@ import re
 
 IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+def generate_ascii_art(text):
+    # Define the characters used to draw the ASCII art
+    chars = ['.', ':', '*', 'o', '&', '8', '#', '@']
+
+    # Split the text into lines and convert each character
+    # to its corresponding ASCII art character
+    lines = []
+    for line in text.split('\n'):
+        ascii_line = ''
+        for char in line:
+            ascii_char = chars[(ord(char) - 32) % len(chars)]
+            ascii_line += ascii_char
+        lines.append(ascii_line)
+
+    # Join the lines back together and return the result
+    return '\n'.join(lines)
+
 def encode(input_str, password):
     joined = "".join([str(ord(char)).zfill(3) for char in input_str])
     encrypted_num = int(joined + "0") * int("".join([str(ord(char)).zfill(2) for char in password]))
@@ -66,6 +83,9 @@ def send_messages(sock, password, channel, nickname):
             print(f"[{nickname}] {user_input}")
 
 def main():
+    text = 'Litchat v3'
+ascii_art = generate_ascii_art(text)
+print(ascii_art)
     # Get user input for username and password
     username = input("Enter your username/nickname for IRC: ")
     password = input("Enter the encryption password: ")
