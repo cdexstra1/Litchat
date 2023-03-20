@@ -5,6 +5,9 @@ import socket
 import time
 import threading
 import re
+import art
+
+print(art.text2art("Litchat v3", font='block'))
 
 IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
