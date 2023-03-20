@@ -8,23 +8,6 @@ import re
 
 IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-def generate_ascii_art(text):
-    # Define the characters used to draw the ASCII art
-    chars = ['.', ':', '*', 'o', '&', '8', '#', '@']
-
-    # Split the text into lines and convert each character
-    # to its corresponding ASCII art character
-    lines = []
-    for line in text.split('\n'):
-        ascii_line = ''
-        for char in line:
-            ascii_char = chars[(ord(char) - 32) % len(chars)]
-            ascii_line += ascii_char
-        lines.append(ascii_line)
-
-    # Join the lines back together and return the result
-    return '\n'.join(lines)
-
 def encode(input_str, password):
     joined = "".join([str(ord(char)).zfill(3) for char in input_str])
     encrypted_num = int(joined + "0") * int("".join([str(ord(char)).zfill(2) for char in password]))
@@ -76,16 +59,57 @@ def send_messages(sock, password, channel, nickname):
             sock.send(f"QUIT :Leaving\r\n".encode())
             sock.close()
             sys.exit()
+        elif user_input.startswith("/send"):
+            # Extract filename and recipient nickname from command
+            parts = user_input.split(" ")
+            if len(parts) != 3:
+                print("Invalid command. Usage: /send <filename> <nickname>")
+            else:
+                filename = parts[1]
+                recipient = parts[2]
+
+                # Get recipient's IP address and DCC port
+                sock.send(f"WHOIS {recipient}\r\n".encode())
+                data = ""
+                while True:
+                    data += sock.recv(4096).decode()
+                    if "WHOIS" in data:
+                        break
+                match = re.search(f"{recipient} \S+ \S+ \S+ \S+ (\S+) (\d+) (\S+)", data)
+                if not match:
+                    print(f"Could not find user {recipient}")
+                    continue
+                address = match.group(1)
+                port = int(match.group(2))
+
+                # Initiate DCC file transfer
+                dcc_transfer(sock, filename, address, port)
         else:
             # Send message to channel
             encrypted_message = encode(user_input, password)
             sock.send(f"PRIVMSG {channel} :{encrypted_message}\r\n".encode())
             print(f"[{nickname}] {user_input}")
 
+
+def dcc_transfer(sock, filename, address, port):
+    # Request file transfer via DCC
+    sock.send(f"DCC SEND {filename} {address} {port} 0 0\r\n".encode())
+
+    # Accept file transfer
+    dcc_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    dcc_sock.bind(('0.0.0.0', port))
+    dcc_sock.listen(1)
+    dcc_conn, dcc_addr = dcc_sock.accept()
+    with open(filename, "wb") as f:
+        while True:
+            data = dcc_conn.recv(4096)
+            if not data:
+                break
+            f.write(data)
+    dcc_conn.close()
+
+
 def main():
-    text = 'Litchat v3'
-    ascii_art = generate_ascii_art(text)
-    print(ascii_art)
     # Get user input for username and password
     username = input("Enter your username/nickname for IRC: ")
     password = input("Enter the encryption password: ")
