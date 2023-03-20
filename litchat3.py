@@ -84,8 +84,8 @@ def send_messages(sock, password, channel, nickname):
 
 def main():
     text = 'Litchat v3'
-ascii_art = generate_ascii_art(text)
-print(ascii_art)
+    ascii_art = generate_ascii_art(text)
+    print(ascii_art)
     # Get user input for username and password
     username = input("Enter your username/nickname for IRC: ")
     password = input("Enter the encryption password: ")
