@@ -5,7 +5,6 @@ import socket
 import time
 import threading
 import re
-import art
 
 IRC_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -67,7 +66,6 @@ def send_messages(sock, password, channel, nickname):
             print(f"[{nickname}] {user_input}")
 
 def main():
-    print(art.text2art("Litchat v3", font='block'))
     # Get user input for username and password
     username = input("Enter your username/nickname for IRC: ")
     password = input("Enter the encryption password: ")
