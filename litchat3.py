@@ -115,7 +115,7 @@ def main():
     password = input("Enter the encryption password: ")
 
     # IRC configuration
-    server = "irc.libera.chat"  # IRC server hostname
+    server = "ircd.chat"  # IRC server hostname
     port = 6697  # IRC server port
     channel = "#litten"  # IRC channel name
     nickname = username  # Set IRC nickname to user input
